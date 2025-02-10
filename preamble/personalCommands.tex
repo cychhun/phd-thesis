@@ -1,0 +1,240 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%           Commandes perso            %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand*{\figureautorefname}{Figure}
+\renewcommand*{\chapterautorefname}{Chapter}
+\renewcommand*{\sectionautorefname}{Section}
+\renewcommand*{\subsectionautorefname}{Section}
+\renewcommand*{\subsubsectionautorefname}{Section}
+\renewcommand*{\tableautorefname}{Table}
+\renewcommand*{\equationautorefname}{Equation}
+\renewcommand*{\appendixautorefname}{Appendix}
+\renewcommand*{\theoremautorefname}{Theorem}
+% \renewcommand{\figurename}{Fig.}
+% \renewcommand{\tablename}{Tab.}
+
+\titleformat{\subsubsection}[hang]{\bfseries}{}{1em}{$\, \blacksquare \,$ }
+\newcommand{\result}[2]{ #1 \color{lightgray}\!{\scriptsize{$\pm{#2}$}}}
+\newcommand{\icc}[3]{{\scriptsize\textcolor{lightgray}{#1}} #2 {\scriptsize\textcolor{lightgray}{#3}}}
+\newcommand{\lorem}[2]{\textcolor{blue}{\lipsum[#1][#2]}}
+\newcommand{\coling}{\textsc{COLING}}
+\newcommand{\hanna}{\textsc{HANNA}}
+\newcommand{\asgfull}{Automatic Story Generation}
+\newcommand{\asg}{\textsc{ASG}}
+\newcommand{\asefull}{Automatic Story Evaluation}
+\newcommand{\ase}{\textsc{ASE}}
+\newcommand{\csr}{\textsc{CSR}}
+\newcommand{\ml}{\textsc{ML}}
+\newcommand{\nlp}{\textsc{NLP}}
+\newcommand{\nlpfull}{Natural Language Processing}
+\newcommand{\nlg}{\textsc{NLG}}
+\newcommand{\nlgfull}{Natural Language Generation}
+\newcommand{\slm}{\textsc{SLM}}
+\newcommand{\llm}{\textsc{LLM}}
+\newcommand{\llmfull}{Large Language Model}
+\newcommand{\cnn}{\textsc{CNN}}
+\newcommand{\rnn}{\textsc{RNN}}
+\newcommand{\lstm}{\textsc{LSTM}}
+\newcommand{\seqseq}{\textsc{Seq2Seq}}
+\newcommand{\cbow}{\textsc{CBOW}}
+\newcommand{\wvec}{\textsc{Word2vec}}
+\newcommand{\glove}{\textsc{GloVe}}
+\newcommand{\ftext}{\textsc{FastText}}
+\newcommand{\wmt}{\textsc{WMT}}
+\newcommand{\roc}{\textsc{ROCStories}}
+\newcommand{\sind}{\textsc{SIND}}
+\newcommand{\wpfan}{\textsc{WritingPrompts}}
+\newcommand{\rpg}{\textsc{RPG}}
+\newcommand{\rpguild}{\textsc{RolePlayerGuild}}
+\newcommand{\pgnt}{\textsc{PG-19}}
+\newcommand{\storium}{\textsc{Storium}}
+\newcommand{\openmeva}{\textsc{OpenMEVA}}
+\newcommand{\swag}{\textsc{SWAG}}
+\newcommand{\tingle}{\textsc{DeepTingle}}
+\newcommand{\etoe}{\textsc{Event2Event}}
+\newcommand{\etos}{\textsc{Event2Sequence}}
+\newcommand{\engen}{\textsc{EnGen}}
+\newcommand{\stsa}{\textsc{S2SA}}
+\newcommand{\entnlm}{\textsc{EntityNLM}}
+\newcommand{\paw}{\textsc{Plan-And-Write}}
+\newcommand{\emorl}{\textsc{EmoRL}}
+\newcommand{\emosup}{\textsc{EmoSup}}
+\newcommand{\ctpo}{\textsc{C2PO}}
+\newcommand{\plotm}{\textsc{PlotMachines}}
+\newcommand{\cnet}{\textsc{ConceptNet}}
+\newcommand{\atomic}{\textsc{Atomic}}
+\newcommand{\ktt}{\textsc{Keyword2Text}}
+\newcommand{\fusion}{\textsc{Fusion}}
+\newcommand{\hint}{\textsc{HINT}}
+\newcommand{\tdvae}{\textsc{TD-VAE}}
+\newcommand{\elmo}{\textsc{ELMo}}
+\newcommand{\bert}{\textsc{BERT}}
+\newcommand{\bart}{\textsc{BART}}
+\newcommand{\bertgen}{\textsc{BERTGen}}
+\newcommand{\bertgeneration}{\textsc{BERTGeneration}}
+\newcommand{\ctrl}{\textsc{CTRL}}
+\newcommand{\roberta}{\textsc{RoBERTa}}
+\newcommand{\xlnet}{\textsc{XLNet}}
+\newcommand{\gpt}{\textsc{GPT}}
+\newcommand{\gptt}{\textsc{GPT-2}}
+\newcommand{\gpttag}{\textsc{GPT-2 (tag)}}
+\newcommand{\gptthree}{\textsc{GPT-3}}
+\newcommand{\gptfour}{\textsc{GPT-4}}
+\newcommand{\lamda}{\textsc{LaMDA}}
+\newcommand{\palm}{\textsc{PaLM}}
+\newcommand{\chatgpt}{\textsc{ChatGPT}}
+\newcommand{\instructgpt}{\textsc{InstructGPT}}
+\newcommand{\llama}{\textsc{LLaMA}}
+\newcommand{\llamasmall}{Llama-7B}
+\newcommand{\llamamid}{Llama-13B}
+\newcommand{\llamalarge}{Llama-30B}
+\newcommand{\mistral}{Mistral-7B}
+\newcommand{\beluga}{Beluga-13B}
+\newcommand{\platypus}{Platypus2-70B}
+\newcommand{\eop}{\textsc{EOP}}
+\newcommand{\eos}{\textsc{EOS}}
+\newcommand{\eoptag}{\texttt{<EOP>}}
+\newcommand{\transf}{\textsc{Transformers}}
+\newcommand{\pingouin}{\textsc{Pingouin}}
+\newcommand{\mink}{Min-K\%}
+\newcommand{\minkprob}{\textsc{Min-K\% Prob}}
+\newcommand{\booksmia}{\textsc{BooksMIA}}
+\newcommand{\nneval}{\textsc{NNEval}}
+\newcommand{\bleu}{\textsc{BLEU}}
+\newcommand{\nist}{\textsc{NIST}}
+\newcommand{\rouge}{\textsc{ROUGE}}
+\newcommand{\meteor}{\textsc{METEOR}}
+\newcommand{\chrf}{\textsc{chrF}}
+\newcommand{\chrp}{\textsc{chrP}}
+\newcommand{\chrr}{\textsc{chrR}}
+\newcommand{\cider}{\textsc{CIDEr}}
+\newcommand{\rougewe}{\textsc{ROUGE-WE}}
+\newcommand{\bertscore}{\textsc{BERTScore}}
+\newcommand{\mover}{\textsc{MoverScore}}
+\newcommand{\bary}{\textsc{BaryScore}}
+\newcommand{\depth}{\textsc{DepthScore}}
+\newcommand{\sthree}{\textsc{S3}}
+\newcommand{\summa}{\textsc{SummaQA}}
+\newcommand{\qascore}{$\textrm{QA}_\textrm{F-score}$}
+\newcommand{\qaconf}{$\textrm{QA}_\textrm{conf}$}
+\newcommand{\infolm}{\textsc{InfoLM}}
+\newcommand{\coverage}{\textsc{Coverage}}
+\newcommand{\density}{\textsc{Density}}
+\newcommand{\compression}{\textsc{Compression}}
+\newcommand{\tlength}{\textsc{Text length}}
+\newcommand{\novelty}{\textsc{Novelty}}
+\newcommand{\repetition}{\textsc{Repetition}}
+\newcommand{\supert}{\textsc{SUPERT}}
+\newcommand{\gold}{\textsc{Gold}}
+\newcommand{\blanc}{\textsc{BLANC}}
+\newcommand{\bartscore}{\textsc{BARTScore}}
+\newcommand{\tfidf}{\textsc{TF-IDF}}
+\newcommand{\summeval}{\textsc{SummEval}}
+\newcommand{\myre}{\textsc{RE}}
+\newcommand{\mych}{\textsc{CH}}
+\newcommand{\myem}{\textsc{EM}}
+\newcommand{\mysu}{\textsc{SU}}
+\newcommand{\myeg}{\textsc{EG}}
+\newcommand{\mycx}{\textsc{CX}}
+\newcommand{\fwer}{\textsc{FWER}}
+\newcommand{\eg}{\emph{e.g.}}
+\newcommand{\ie}{\emph{i.e.}}
+\newcommand{\wrt}{w.r.t.}
+\newcommand{\added}[1]{\textcolor{purple}{#1}}
+\newcommand{\missingquote}{\textcolor{red}{Interesting Quote}}
+\newcommand{\missingauthor}{\textcolor{red}{Author}}
+\newcommand{\towrite}{\todo[inline, color=orange!50!red]{Section \thesection\ --- TO WRITE}}
+\newcommand{\torewrite}{\todo[inline, color=orange!75!yellow]{Section \thesection\ --- TO REWRITE}}
+\newcommand{\tocomplete}{\todo[inline, color=yellow]{Section \thesection\ --- TO COMPLETE}}
+\newcommand{\toreview}{\todo[inline, color=green]{Section \thesection\ --- TO REVIEW}}
+\newcommand{\toreviewcomm}[1]{\todo[inline, color=green]{Section \thesection\ --- TO REVIEW #1}}
+\newcommand{\toreviewc}{\todo[inline, color=green!50!blue]{Section \thesection\ --- TO REVIEW CHLOÉ}}
+\newcommand{\mytodo}[1]{\todo[inline]{Section \thesection\ --- #1}}
+\newcommand{\todomaybe}[1]{\todo[inline, color=cyan]{Section \thesection\ --- #1}}
+\newcommand{\question}[1]{\todo[inline, color=violet!50!white]{Section \thesection\ --- #1}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\newcommand{\cmark}{\textcolor{green!80!black}{\ding{51}}}
+\newcommand{\xmark}{\textcolor{red}{\ding{55}}}
+\newcommand{\pmark}{\textcolor{orange}{$\boldsymbol{\approx}$}}
+\newcommand{\autorefp}[1]{(\autoref{#1})}
+
+%% Abstract pour chapitre
+\newcommand{\chapabstract}[1]{
+    \begin{tcolorbox}[title=Chapter \thechapter\ Abstract, halign title=center]
+    #1
+    \end{tcolorbox}
+}
+
+%% Definition
+\NewTcbTheorem[]{defi}{Definition}%
+{colback=green!5,colframe=green!35!black,fonttitle=\bfseries}{def}
+
+%% Remark
+\NewTcbTheorem[]{remk}{Remark}%
+{colback=purple!5,colframe=purple!35!black,fonttitle=\bfseries}{remk}
+
+
+%% Indiquer le texte copié/collé de mes articles
+\newenvironment{fromarticle}{%
+            \color{blue}
+	}{}
+
+
+%% Indiquer le texte copié/collé de mes articles
+\newenvironment{newtext}{%
+            \color{purple}
+	}{}
+
+  
+%% Figures centrées, et en position 'here, top, bottom or page'
+\newenvironment{figureth}{%
+		\begin{figure}[htbp]
+			\centering
+	}{
+		\end{figure}
+		}
+		
+		
+%% Tableaux centrés, et en position 'here, top, bottom or page'
+\newenvironment{tableth}{%
+		\begin{table}[htbp]
+			\centering
+			%\rowcolors{1}{coleurtableau}{coleurtableau}
+	}{
+		\end{table}
+		}
+
+%% Sous-figures centrées, en position 'top'		
+\newenvironment{subfigureth}[1]{%
+	\begin{subfigure}[t]{#1}
+	\centering
+}{
+	\end{subfigure}
+}
+
+\newcommand{\citationChap}[2]{%
+	\epigraph{``\textit{#1}''{}}{#2}
+}
+
+%% On commence par une page impaire quand on change le style de numérotation de pages 
+\let\oldpagenumbering\pagenumbering
+\renewcommand{\pagenumbering}[1]{%
+	\cleardoublepage
+	\oldpagenumbering{#1}
+}
+
+\newenvironment{localsize}[1]
+{%
+  \clearpage
+  \let\orignewcommand\newcommand
+  \let\newcommand\renewcommand
+  \makeatletter
+  \input{bk#1.clo}%
+  \makeatother
+  \let\newcommand\orignewcommand
+}
+{%
+  \clearpage
+}

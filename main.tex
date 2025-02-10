@@ -1,0 +1,118 @@
+%% Copyright (C) 2014 Dorian Depriester
+%% http://blog.dorian-depriester.fr
+%%
+%% This file may be distributed and/or modified under the conditions
+%% of the LaTeX Project Public License, either version 1.3c of this
+%% license or (at your option) any later version. The latest version
+%% of this license is in:
+%%
+%%    http://www.latex-project.org/lppl.txt
+%%
+%% and version 1.3c or later is part of all distributions of LaTeX
+%% version 2006/05/20 or later.
+%%
+%% This work has the LPPL maintenance status `maintained'.
+%%
+%% The Current Maintainer of this work is Dorian Depriester
+%% <contact [at] dorian [-] depriester [dot] fr>.
+%%
+%% This is main.tex for French PhD Thesis.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%           Fichier maitre				%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[a4paper, 11pt, twoside, openright]{report}
+\input{preamble/preamble}		% Liste des packages et de leurs options
+\input{preamble/personalCommands}	% Commandes et environnements perso
+\input{titlePage/titlePageForm}
+\input{titlePage/lastPageForm}
+
+\begin{document}
+% Préambule
+        \begin{localsize}{10}
+        \newgeometry{	
+    	left=16mm,
+    	top=30mm,
+    	right=16mm,
+    	bottom=30mm
+        }
+        \sffamily
+	\input{titlePage/titlePageLayout}
+        \rmfamily
+        \end{localsize}
+        \restoregeometry
+        \cleardoublepage
+        \thispagestyle{empty}
+        \vfil
+        \begin{center}
+            \textit{This page intentionally left blank.}
+        \end{center}
+        \vfil
+        \cleardoublepage
+
+	\pagenumbering{roman}
+
+        \includefrom{preamble/}{acknowledgments}
+        \includefrom{preamble/}{abstract}
+        \includefrom{preamble/}{resume}
+        
+            % Table des matières
+                \setcounter{tocdepth}{1}	% Pas besoin de trop détailler le sommaire ici (chapitres/sections)
+                \dominitoc						% Génération des mini-toc	\pagenumbering{arabic}
+                \tableofcontents
+            % Liste des figures
+                \listoffigures
+            % Liste des tableaux
+                \listoftables
+            % Liste des TODOs
+                % \listoftodos
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%		
+%        Contenu du document        %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        % \setcounter{secnumdepth}{3}
+	\setcounter{mtc}{6}	% "Corrige" les minitocs décalés à cause des chapter* (ex : table des matières)
+	\pagenumbering{arabic}
+	\includefrom{chapter1/}{chapter1}
+	\includefrom{chapter2/}{chapter2}
+	\includefrom{chapter3/}{chapter3}
+	\includefrom{chapter4/}{chapter4}
+	\includefrom{chapter5/}{chapter5}
+	\includefrom{chapter6/}{chapter6}
+	\includefrom{chapter7/}{chapter7}
+
+        \bibliographystyle{acl_natbib}
+        \bibliography{biblio}
+	
+	% % Annexes
+	\begin{appendix}
+		\pagenumbering{Roman}
+		\includefrom{appendix/}{appendix}				% Figures en annexe
+			
+	% 	% Liste des acronymes, glossaire et liste des symboles (dans l'ordre)		
+	% 	\printglossary[type=\acronymtype , title={List of acronyms}, toctitle={List of acronyms}]
+	% 	\printglossary[title=Glossary,toctitle=Glossary]
+	% 	\printglossary[type=notation,title={List of symbols}, toctitle={List of symbols}]
+	
+	\end{appendix}
+
+        \cleardoublepage
+        \thispagestyle{empty}
+        \null
+        \clearpage
+
+        \begin{localsize}{10}
+        \newgeometry{	
+    	left=16mm,
+    	top=30mm,
+    	right=16mm,
+    	bottom=30mm
+        }
+        \sffamily
+	\input{titlePage/lastPageLayout}
+        \rmfamily
+        \end{localsize}
+ 
+\end{document}

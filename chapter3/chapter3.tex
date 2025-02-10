@@ -1,0 +1,653 @@
+\chapter{Methodology for Story Evaluation and {\asg} Meta-Evaluation}
+\label{chap:methodology_story_evaluation}
+\citationChap{
+    `No, no! The adventures first,' said the Gryphon in an impatient tone: `explanations take such a dreadful time.'
+    }{\textit{Alice’s Adventures in Wonderland}, Lewis Carroll}
+\minitoc
+\newpage
+
+\chapabstract{
+    In this chapter, we lay the groundwork for conducting a meta-evaluation of {\asgfull}. We begin by describing our chosen setting and providing definitions for the {\asg} and {\ase} tasks (\autoref{sec:methodology_introduction}). Then, we review the human evaluation methods used in the {\asg} literature (\autoref{sub:existing_human_evaluation}) and several approaches from the social sciences literature (\autoref{sub:social_sciences}). This allows us to propose an original, comprehensive set of six criteria (\autoref{sub:our_criteria}). We select and review a number of automatic evaluation measures designed for diverse {\nlp} tasks (\autoref{sub:survey_automatic_measures}) and grouped them in different classes {\wrt}\ a newly-proposed taxonomy (\autoref{sub:taxonomy_measures}). Finally, we describe our meta-evaluation framework, which we tailored for the {\asg} task (\autoref{sec:meta_evaluation_framework}).
+}
+
+\section{Introduction and Definitions}
+\label{sec:methodology_introduction}
+
+As explained in \autoref{sec:eval_and_meta}, reliable methods for the evaluation of {\nlp} systems are crucial for comparing performances across models and identifying new research directions. Both human and automatic evaluation frameworks have been proposed for a variety of tasks, but not in the context of {\asgfull} (\asg). Indeed, while {\asg} systems have been exhibiting significant improvements in recent years, story evaluation has been lagging behind. This can be explained by the highly subjective nature of the task, coupled with the wide diversity of possible evaluation criteria.
+
+Let us first describe our chosen setting. The {\asg} task commonly involves generating a story from a short sentence called a \textit{prompt} \citep{alabdulkarim2021automatic}. To avoid confusion, we may also call this prompt a \textit{story-prompt}, so as to distinguish it from the Eval-Prompt, which will refer to the input prompt that is fed to a large language model (see \autoref{sub:llm_methodology_ase}). We define the tasks of {\asgfull} and {\asefull} below.
+
+\begin{defi}{\asgfull\ (\asg)}{automatic_story_generation}
+    Given a story-prompt $p_i$, the {\asg} task consists in using a language model that takes $p_i$ as its input for generating a story $y_i$.
+\end{defi}
+
+\begin{defi}{\asefull\ (\ase)}{automatic_story_evaluation}
+    Given an automatic evaluation measure $m$ (\textit{e.g.}\ a scoring algorithm, a Large Language Model (\llm)\dots), a story-prompt $p_i$, and a story $y_i$, we define the {\ase} task as the production of an evaluation score $m(y_i)$.
+\end{defi}
+
+In this chapter, we propose a new methodology for the evaluation of {\asg}, which will be used for our meta-evaluation experiments presented in \autoref{chap:meta_evaluation}. In \autoref{sec:human_criteria}, we describe our process for designing new criteria for human story evaluation, leading to the introduction of a comprehensive set of six human criteria: Relevance, Coherence, Empathy, Surprise, Engagement, and Complexity. Then, in \autoref{sec:automatic_measures_story_evaluation}, we review a number of automatic measures for text evaluation and propose a two-dimensional taxonomy that will allow for a more fine-grained analysis of automatic story evaluation. Finally, in \autoref{sec:meta_evaluation_framework}, we present a meta-evaluation framework that is tailored to the task of {\asg}, namely through the design of a specific meta-evaluation strategy called the overall correlation.
+
+\section{Designing New Criteria for Human Story Evaluation}
+\label{sec:human_criteria}
+
+In {\nlpfull}, human evaluation has always been the gold standard for any evaluation procedure, and even more so for {\asg} where it is the only reliable evaluation method. We started by surveying how it was performed in the {\asg} literature, and found out that there was a glaring lack of a unified procedure for human story evaluation.
+
+\subsection{Survey of Existing Methods of Human Story Evaluation in \asg}
+\label{sub:existing_human_evaluation}
+
+\citet{lee-etal-2019-best} observe that there is little agreement as to how natural language generation systems should be evaluated, with a particularly high degree of variation in the way that human evaluation is carried out. They provide an overview of how human evaluation is currently conducted and present a set of best practices, grounded in the literature. In particular, they advise to define separate and precise criteria for human evaluation to make it as accurate as possible.
+We argue that this is especially relevant to \asg, as evaluating a story a has its fair share of subjectivity. However, we find that there is also little consensus in evaluation of \asg\ performance. We list below the diverse story evaluation criteria we found in the literature, ordered in chronological order of occurrence. \autoref{tab:overview_criteria_1} and \autoref{tab:overview_criteria_2} provide a synoptic overview of those criteria.
+
+\paragraph{Coherence:}
+\begin{itemize}[nolistsep]
+    \item \citet{khalifa2017deeptingle} perform a user study where they compare two pieces of text and ask ``Which text is more coherent?'';
+    \item For \citet{xu-etal-2018-skeleton}, coherence evaluates ``whether the generated story is coherent'';
+    \item \citet{yao2019plan} conduct pairwise comparisons on coherence, defined as ``whether the story is logically consistent and coherent'';
+    \item \citet{jhamtani-berg-kirkpatrick-2020-narrative} evaluate story samples \wrt\ ``coherence, which measures the logical and coherent narrative flow in a story'';
+    \item \citet{akoury2020storium} ask \storium\ users to evaluate generated text on a 5-point Likert scale \wrt\ ``coherence (logical ordering of sentences)'';
+    \item \citet{wang2020narrative} define coherence as ``whether a story is logically consistent or describes a possible scenario'';
+    \item \citet{guan2021long} define coherence as ``inter-sentence relatedness, causal and temporal dependencies'';
+    \item \citet{wilmot2021temporal} ask Mechanical Turk workers to rank five candidate stories from best to worst \wrt\ ``coherence (internal consistency of characters, places, actions and plot development)'';
+\end{itemize}
+
+\paragraph{Interestingness:}
+\begin{itemize}[nolistsep]
+    \item \citet{khalifa2017deeptingle} perform a user study where they compare two pieces of text and ask ``Which text is more interesting?'';
+    \item \citet{yao2019plan} conduct pairwise comparisons on interestingness, defined as ``whether the story is interesting'';
+\end{itemize}
+
+\paragraph{Grammar:}
+\begin{itemize}[nolistsep]
+    \item \citet{khalifa2017deeptingle} perform a user study where they compare two pieces of text and ask ``Which text is more grammatically correct?''
+    \item \citet{guan2019story} define grammar as ``whether an ending is natural and fluent'';
+    \item \citet{guan-etal-2020-knowledge} define grammaticality as ``whether a story is natural and fluent'';
+\end{itemize}
+
+\paragraph{Sentence Preference:}
+\begin{itemize}[nolistsep]
+    \item \citet{clark-etal-2018-neural} present human judges with a short excerpt from a story and two generated sentences, one generated by their \engen\ model and one generated by their entity-unaware \stsa\ model. They then ask them to ``choose a sentence to continue the story'' and to briefly explain why they made the choice they did;
+    \item \citet{clark-smith-2021-choose} ask human writers to choose between suggestions of story completion that are generated by different models;
+\end{itemize}
+
+\paragraph{Faithfulness:}
+\begin{itemize}[nolistsep]
+    \item \citet{peng-etal-2018-towards} define faithfulness as ``whether the generated stories follow a given storyline of five words'';
+    \item \citet{wang2020narrative} define faithfulness as ``whether a story is faithful to a given story beginning and ending'';
+\end{itemize}
+
+\paragraph{Relevance / Fidelity:}
+\begin{itemize}[nolistsep]
+    \item \citet{fan2018hierarchical} conduct a triple pairing task: they use each model to generate stories based on held-out prompts from the test set. Then, groups of three stories are presented to the human judges. The stories and their corresponding prompts are shuffled, and human evaluators are asked to select the correct pairing for all three prompts. This evaluates to which extent the model is able to generate a story that is relevant to the prompt;
+    \item \citet{yao2019plan} conduct pairwise comparisons on fidelity, defined as ``whether the story is on-topic with the given title'';
+    \item \citet{jhamtani-berg-kirkpatrick-2020-narrative} evaluate story samples \wrt\ ``fidelity to title, which measures the degree to which the story is relevant to the given title'';
+    \item \citet{akoury2020storium} ask \storium\ users to evaluate generated text on a 5-point Likert scale \wrt\ ``relevance (fit with the current story)'';
+    \item \citet{goldfarb-tarrant-etal-2020-content} define relevance as ``whether stories both relate to the given prompt and remain on topic for the duration of the story'';
+    \item \citet{bai2021semantics} ask four native speakers to compare the generations of different systems in pairs \wrt\ topic relevance, without further definition;
+\end{itemize}
+
+\paragraph{Fluency:}
+\begin{itemize}[nolistsep]
+    \item \citet{xu-etal-2018-skeleton} define fluency as ``whether each
+sentence in the generated story is correct in grammar'';
+    \item \citet{akoury2020storium} ask \storium\ users to evaluate generated text on a 5-point Likert scale \wrt\ ``fluency (judgment of grammaticality)'';
+    \item \citet{guan2021long} define fluency as ``a measure of intra-sentence linguistic quality and grammatical correctness'';
+    \item \citet{bai2021semantics} ask four native speakers to compare the generations of different systems in pairs \wrt\ fluency, without further definition;
+    \item \citet{wilmot2021temporal} ask Mechanical Turk workers to rank five candidate stories from best to worst \wrt\ ``fluency (how well written the story is, including its use of expressive language)'';
+    \item \citet{pascual-etal-2021-plug-play} ask human judges to rate stories on a 1--7 Likert scale \wrt\ ``fluency (the text can be understood easily, well, and quickly'';
+\end{itemize}
+
+\paragraph{Logicality:}
+\begin{itemize}[nolistsep]
+    \item \citet{guan2019story} define logicality as ``whether an ending is reasonable and coherent with the story context in logic'';
+    \item \citet{guan-etal-2020-knowledge} define logicality as ``whether a story is coherent to the given beginning and reasonable in terms of causal and temporal dependencies in the context'';
+    \item \citet{pascual-etal-2021-plug-play} ask human judges to rate stories on a 1--7 Likert scale \wrt\ ``logical consistency (there are no contradictions in the text)'';
+\end{itemize}
+
+\paragraph{Overall Preference:}
+\begin{itemize}[nolistsep]
+    \item \citet{yao2019plan} conduct pairwise comparisons on overall user preference, defined as ``how do users like the story'';
+    \item \citet{fan-etal-2019-strategies} show two different stories (that were generated based on the same human-written prompt) to human judges, who do not see the prompt. The evaluators are then asked to mark which story they prefer;
+    \item \citet{brahman2020modeling} ask workers to evaluate pairs of stories on a 0--3 scale (3 being very good) on content quality, \ie, ``to indicate whether a story is fluent, logically coherent, and on-topic (related to the given title)'';
+    \item \citet{wang2020narrative} define overall preference as ``whether the human judge like a sequence of sentences as a story'';
+    \item \citet{bai2021semantics} ask four native speakers to compare the generations of different systems in pairs \wrt\ overall preference;
+\end{itemize}
+
+\paragraph{Likability:}
+\begin{itemize}[nolistsep]
+    \item \citet{akoury2020storium} ask \storium\ users to evaluate generated text on a 5-point Likert scale \wrt\ ``likability (subjective assessment of enjoyability)'';
+\end{itemize}
+
+\paragraph{Overall Quality:}
+\begin{itemize}[nolistsep]
+    \item \citet{goldfarb-tarrant-etal-2020-content} define overall quality to be ``a combination of coherence, interestingness, and relevance, similarly to most other story generation works'';
+    \item \citet{wilmot2021temporal} ask Mechanical Turk workers to rank five candidate stories from best to worst \wrt\ ``overall (a subjective judgement on their overall impression of the story)'';
+    \item \citet{guan2021openmeva} decide the overall quality of a story by ``summarizing multiple separate criteria: a story should get punishment in points if it contains errors such as repetitive plots, unrelated events and conflicting logic, or globally chaotic scenes'';
+\end{itemize}
+
+\paragraph{Outline Utilisation:}
+\begin{itemize}[nolistsep]
+    \item \citet{rashkin-etal-2020-plotmachines} give raters two paragraphs, each generated by different models, and ask them to select which is utilizing the provided outline better;
+\end{itemize}
+
+\paragraph{Narrative Flow:}
+\begin{itemize}[nolistsep]
+    \item \citet{rashkin-etal-2020-plotmachines} give raters a generated paragraph (with the previous paragraph as context). They are asked to rate on a scale from 1 to 5 how much the paragraph: (a) repeats content from the previous paragraph, (b) transitions naturally from the previous paragraph, and (c) stays relevant and on-topic throughout the paragraph;
+\end{itemize}
+
+\paragraph{Ordering:}
+\begin{itemize}[nolistsep]
+    \item \citet{rashkin-etal-2020-plotmachines} give raters a pair of consecutive generated paragraphs, presented in a random order, and ask them to attempt to decipher the order. The intuition is that, if the model output is very well-structured, then it should be easier for humans to decipher the order;
+\end{itemize}
+
+\paragraph{Emotion Faithfulness:}
+\begin{itemize}[nolistsep]
+    \item \citet{brahman2020modeling} ask workers to evaluate pairs of stories on a 0--3 scale (3 being very good) on emotion faithfulness, \ie, ``to assess whether it follows the desired emotion arc for the protagonist'';
+\end{itemize}
+
+\paragraph{Content Quality:}
+\begin{itemize}[nolistsep]
+    \item \citet{brahman2020modeling} ask workers to evaluate pairs of stories on a 0--3 scale (3 being very good) on content quality, \ie, ``to indicate whether a story is fluent, logically coherent, and on-topic (related to the given title)'';
+\end{itemize}
+
+\paragraph{Human Plausibility:}
+\begin{itemize}[nolistsep]
+    \item \citet{ghazarian-etal-2021-plot} ask human annotators to rate stories on a scale of 0 to 5 (from ``not at all plausible'' to ``completely plausible'');
+\end{itemize}
+
+\paragraph{Ending Quality:}
+\begin{itemize}[nolistsep]
+    \item \citet{bai2021semantics} ask four native speakers to compare the generations of different systems in pairs \wrt\ ending quality, without further definition;
+\end{itemize}
+
+\paragraph{Naturalness:}
+\begin{itemize}[nolistsep]
+    \item \citet{pascual-etal-2021-plug-play} ask human judges to rate stories on a 1--7 Likert scale \wrt\ ``naturalness (the text seems to have been written by a human)'';
+\end{itemize}
+
+\paragraph{Takeaways.}
+Many of these criteria are not specific to \asgfull\ (grammar, fluency, overall preference, overall quality, content quality, human plausibility, naturalness), overlap with one another (faithfulness and relevance; coherence, logicality and narrative flow) or are ascribed to a specific setting (sentence preference, outline utilisation, ordering, emotion faithfulness, ending quality). Furthermore, evaluation protocols mostly use only two or three criteria, which is not enough to grasp all aspects of a task as complex as \asg. They also do not associate Likert scales with explicit descriptions, even though such descriptions could reduce the subjectivity of the labelling process.
+
+In order to propose a more comprehensive set of criteria for human evaluation of story generation, we delved into the social sciences literature.
+
+\afterpage{
+    \clearpage
+    \newgeometry{top=1.5cm, bottom=1.5cm, left=1.5cm, right=1.5cm}
+    \thispagestyle{empty}
+    \begin{landscape}
+        \begin{table}
+            \small
+            \centering
+            \begin{tabular}{llll}
+                \toprule
+                \textbf{Criterion} & \textbf{Source} & \textbf{Question / Definition} & \textbf{Evaluation Type} \\
+                \midrule
+                \multirow{8}{*}{Coherence} & \citet{khalifa2017deeptingle} & ``Which text is more coherent?'' & Pairwise Comparison \\
+                & \citet{xu-etal-2018-skeleton} & ``Whether the generated story is coherent'' & 10-point Likert Scale \\
+                & \citet{yao2019plan} & ``Whether the story is logically consistent and coherent'' & Pairwise Comparison \\
+                & \citet{jhamtani-berg-kirkpatrick-2020-narrative} & ``Logical and coherent narrative flow'' & Pairwise Comparison \\
+                & \citet{akoury2020storium} & ``Logical ordering of sentences'' & 5-point Likert Scale \\
+                & \citet{wang2020narrative} & ``Whether a story is logically consistent or describes a possible scenario'' & Pairwise Comparison \\
+                & \citet{guan2021long} & ``Inter-sentence relatedness, causal and temporal dependencies'' & Pairwise Comparison \\
+                & \citet{wilmot2021temporal} & ``Internal consistency of characters, places, actions, and plot development'' & 5-fold Ranking \\
+                \midrule
+                \multirow{2}{*}{Interestingness} & \citet{khalifa2017deeptingle} & ``Which text is more interesting?'' & Pairwise Comparison \\
+                & \citet{yao2019plan} & ``Whether the story is interesting'' & Pairwise Comparison \\
+                \midrule
+                \multirow{3}{*}{Grammar} & \citet{khalifa2017deeptingle} & ``Which text is more grammativally correct?'' & Pairwise Comparison \\
+                & \citet{guan2019story} & ``Whether an ending is natural and fluent'' & 3-point Likert Scale \\
+                & \citet{guan-etal-2020-knowledge} & ``Whether an story is natural and fluent'' & Pairwise Comparison \\
+                \midrule
+                \multirow{2}{*}{Sentence Preference} & \citet{clark-etal-2018-neural} & ``Choose a sentence to continue the story'' & Pairwise Comparison \\
+                & \citet{clark-smith-2021-choose} & Choose between suggestions of story completion & Pairwise Comparison \\
+                \midrule
+                \multirow{2}{*}{Faithfulness} & \citet{peng-etal-2018-towards} & ``Whether the generated stories follow a given storyline of five words'' & 5-point Likert Scale \\
+                & \citet{wang2020narrative} & ``Whether a story is faithful to a given story beginning and ending'' & Pairwise Comparison \\
+                \midrule
+                \multirow{6}{*}{Relevance / Fidelity} & \citet{fan2018hierarchical} & Select the correct prompt-story pairing & Triple Pairing Task \\
+                & \citet{yao2019plan} & ``Whether the story is on-topic with the given title'' & Pairwise Comparison \\
+                & \citet{jhamtani-berg-kirkpatrick-2020-narrative} & ``The degree to which the story is relevant to the given title'' & Pairwise Comparison \\
+                & \citet{akoury2020storium} & ``Fit with the current story'' & 5-point Likert Scale \\
+                & \citet{goldfarb-tarrant-etal-2020-content} & ``Whether stories both relate to the given prompt [...]'' & 5-point Likert Scale \\
+                & \citet{bai2021semantics} & N/A & Pairwise Comparison \\
+                \midrule
+                \multirow{6}{*}{Fluency} & \citet{xu-etal-2018-skeleton} & ``Whether each sentence is correct in grammar'' & 10-point Likert Scale \\
+                & \citet{akoury2020storium} & ``Judgment of grammaticality'' & 5-point Likert Scale \\
+                & \citet{guan2021long} & ``Intra-sentence linguistic quality and grammatical correctness'' & Pairwise Comparison \\
+                & \citet{bai2021semantics} & N/A & Pairwise Comparison \\
+                & \citet{wilmot2021temporal} & ``How well written the story is'' & 5-fold Ranking \\
+                & \citet{pascual-etal-2021-plug-play} & ``The text can be understood easily, well, and quickly'' & 7-point Likert Scale \\
+                \bottomrule
+            \end{tabular}
+            \caption{Overview of human story evaluation practices in {\asg} (Part 1 of 2).}
+            \label{tab:overview_criteria_1}
+        \end{table}
+    \end{landscape}
+    
+    \clearpage
+    
+    \thispagestyle{empty}
+    \begin{landscape}
+        \begin{table}
+            \small
+            \centering
+            \begin{tabular}{llll}
+                \toprule
+                \textbf{Criterion} & \textbf{Source} & \textbf{Question / Definition} & \textbf{Evaluation Type} \\
+                \midrule
+                \multirow{3}{*}{Logicality} & \citet{guan2019story} & ``Whether an ending is reasonable and coherent with the story context in logic'' & 3-point Likert Scale \\
+                & \citet{guan-etal-2020-knowledge} & ``Whether a story is coherent to the given beginning [...]'' & Pairwise Comparison \\
+                & \citet{pascual-etal-2021-plug-play} & ``No contradictions in the text'' & 7-point Likert Scale \\
+                \midrule
+                \multirow{5}{*}{Overall Preference} & \citet{yao2019plan} & ``How do users like the story'' & Pairwise Comparison \\
+                & \citet{fan-etal-2019-strategies} & Mark the preferred story & Pairwise Comparison \\
+                & \citet{brahman2020modeling} & ``Whether a story is fluent, logically coherent, and on-topic [...]'' & 4-point Likert Scale \\
+                & \citet{wang2020narrative} & ``Whether the human judge like a sequence of sentences as a story'' & Pairwise Comparison \\
+                & \citet{bai2021semantics} & N/A & Pairwise Comparison \\
+                \midrule
+                Likability & \citet{akoury2020storium} & ``Subjective assessment of enjoyability'' & 5-point Likert Scale \\
+                \midrule
+                \multirow{3}{*}{Overall Quality} & \citet{goldfarb-tarrant-etal-2020-content} & ``A combination of coherence, interestingness, and relevance'' & 5-point Likert Scale \\
+                & \citet{wilmot2021temporal} & ``A subjective judgement on their overall impression of the story'' & 5-fold Ranking \\
+                & \citet{guan2021openmeva} & ``A story should get punishment in points if it contains errors [...]'' & 5-point Likert Scale \\
+                \midrule
+                Outline Utilisation & \citet{rashkin-etal-2020-plotmachines} & Select the paragraph that uses the provided outline better & Pairwise Comparison \\
+                \midrule
+                Narrative Flow & \citet{rashkin-etal-2020-plotmachines} & 3 ratings: repetitions, natural transitions and relevance & 5-point Likert Scale \\
+                \midrule
+                Ordering & \citet{rashkin-etal-2020-plotmachines} & Retrieve the original ordering of shuffled paragraphs & Accuracy \\
+                \midrule
+                Emotion Faithfulness & \citet{brahman-etal-2020-cue} & ``Whether it follows the desired emotion arc for the protagonist'' & 4-point Likert Scale \\
+                \midrule
+                Content Quality & \citet{brahman-etal-2020-cue} & Whether a story is fluent, logically coherent, and on-topic & 4-point Likert Scale \\
+                \midrule
+                Human Plausibility & \citet{ghazarian-etal-2021-plot} & From ``Not at all plausible'' to ``Completely plausible'' & 6-point Likert Scale \\
+                \midrule
+                Ending Quality & \citet{bai2021semantics} & N/A & Pairwise Comparison \\
+                \midrule
+                Naturalness & \citet{pascual-etal-2021-plug-play} & ``The text seems to have been written by a human'' & 7-point Likert Scale \\
+                \bottomrule
+            \end{tabular}
+            \caption{Overview of human story evaluation practices in {\asg} (Part 2 of 2).}
+            \label{tab:overview_criteria_2}
+        \end{table}
+    \end{landscape}
+    
+    \clearpage
+}
+
+\restoregeometry
+
+\subsection{Approaches From the Social Sciences Literature}
+\label{sub:social_sciences}
+
+The question ``What makes a good story?'' has been tackled from many different angles, and it would be impossible to review all the literature on this topic. In this section, we present a few notable works which propose a framework for describing the quality of a story.
+
+\paragraph{High Point Structure, Episodic Grammars, and Dependency Analysis.}
+
+\citet{mccabe1984makes} select three different methods for examining the structure of a story, each of them emphasizing a distinct aspect: (1) the high point structure \citep{labovNarrativeAnalysisOral1997} focuses on affective information and considers that emotional highs or crisis events are the key components of a story; (2) episodic grammars (also called story grammars) \citep{rumelhart1975notes} liken stories to a succession of problem-solving episodes where the protagonist attempts to accomplish a specific goal; and (3) the dependency analysis \citep{deese1978thought} associates story quality with linguistic complexity, and especially looks at whether propositions are coordinate or subordinate to one another.
+
+Stories were then scored on 6- to 8-point Likert scales, with precise descriptions of each rating, according to how well they realized good structure in each system. They show that the three analyses cover mostly independent aspects of storytelling, despite a small overlap between the episodic and high point methods. Most notably, they find that the best narratives are highly-rated in at least two of the three dimensions, while the worst stories are poorly-rated in all aspects. In other words, people generally enjoy stories that involve (1) engaging emotional commentary, (2) complex problem-solving, and (3) detailed descriptions of characters and events.
+
+\paragraph{Empedocles's Four Elements.}
+
+\citet{dickman2003four} finds that the best definition for a story is: ``a fact wrapped in an emotion that can compel us to take action and so transform the world around us.'' They note that the four fundamental elements of any effective story are passion, hero, antagonist, and transformation. They ground their analysis in the framework of four elements (fire, earth, air, and water) developed by the philosopher and poet Empedocles, student of Pythagoras, putting forth that previous work showed how those four elements could also reflect inner psychological states \citep{hadot2002ancient}.
+
+They refer to the emotion that encircles the main idea and captivates the audience's attention as passion, which is associated with Empedocles's fire. A story is rarely a cohesive whole when it is first presented to an audience: it is made up of independent characters with various needs and goals. Passion is the fire that grabs the readers' attention and pulls them into the narrative.
+
+The earth element is linked to the hero: it symbolizes the manner in which the narrative is anchored in reality. Indeed, the point of view of the hero is our point of entry to the story: it must be sufficiently grounded to support the plot while remaining relatable enough for the readers to follow. Throughout the story, the hero serves as both a guide and a stand-in.
+
+The antagonist is associated with air. They give the story energy and vitality, since the audience considers a story to be flat if there are no barriers. Engaging with the antagonist fosters an atmosphere that lends credibility and intrigue to the story. The antagonist serves as the personification of a greater problem: they crystallize many of the abstract aspects of the plot. In most excellent stories, a strong antagonist provides direction and purpose to the hero's actions, as well as to the audience's attention.
+
+Last, when a tale is conveyed correctly, transformation happens naturally as a consequence. When the hero sets out to conquer the challenges they face, they become a vector of transformation for the world. Since water can change the most out of the four elements, it is the one that is associated with transformation. As the hero emerges from the flames of hell as a better person, the audience is satisfied and learns to moving forward from the negative toward the positive.
+
+\paragraph{Cognitive and Emotional Interest.}
+
+\citet{bae2021preliminary} present an incipient framework for measuring story interestingness that revolves around two types of factors: cognitive interest and emotional interest. The cognitive factors include four components: goal, novelty, inference, and schema violation, while the emotional factors include four other elements: empathy, external emotions, humor, and outcome valence.
+\begin{itemize}[noitemsep]
+    \item Cognitive Factors:
+    \begin{enumerate}
+        \item The goal is the protagonist’s desire, which drive a story forward. The protagonist fights to fulfill their ambitions, which often run contrary to the antagonist's own goals. This generally leads to conflicts that are central to the story. The protagonist's objective must be significant and challenging to accomplish in order for the story to be engaging. A strong logline that has the power to grab the audience's interest usually sums up the goals or objectives of the protagonist in one sentence.
+        \item Novelty is a key component of narrative intelligence, as it helps for many tasks such as characterization, narration, and thematization. Good stories very often exhibit high novelty, as it tends to raise the interest of the reader.
+        \item Predictive inference describes the process of predicting what will happen next in a story, or how a specific event happened. It greatly influences the interestingness of a story and requires a careful handling of the reader's prior information and level of uncertainty. Generally, readers prefer stories with high postdictability, {\ie}, stories that are crafted in such a way that we can at some point put all the parts together as a coherent whole, including inferences and the story's conclusion. This feature is often a result of skillful foreshadowing, which is a device.
+        \item Readers often rely on schema to understand a story, where a schema refers to ``a data structure for representing the generic concepts stored in memory''. Schema violation describes the process of deviating from common schema on purpose, leading to unexpected events that may spark greater interest to the story. However, schema violation requires proper resolution to be effective.
+    \end{enumerate}
+    \item Emotional Factors:
+    \begin{enumerate}
+        \item ``Cognitive'' (mental perspective-taking) or ``emotional'' (raw sharing of emotions) empathy can both be developed through storytelling. Unlike sympathy, empathy in stories is linked to positive feelings, {\eg}\ happiness, contentment, exaltation. Those are essential to the reader's enjoyment of a story. Empathy for fictional characters includes identification with their intentions and aspirations on an internal level as well as recollections of their past experience.
+        \item Common external emotions of literary response include curiosity, suspense, and surprise, which are often associated to story schema. Crafting a good narrative structure often enables the author to elicit desired external emotions in the reader; they can be easily connected to the cognitive factors of interest.
+        \item Humor is a positive experience that frequently coexists with other positive feelings such as playfulness and delight. Humor is known to be very subjective: a humor performer's intentions can be interpreted in wildly different ways. Three dimensions are generally addressed by theories on humor: superiority, incongruity, and relief. Just as surprise benefits greatly from the appropriate resolution of incongruity, humor also greatly benefits from incongruity and its resolution. Humor appears to be a sufficient rather than a necessary component of story interest, which makes its inclusion in the list of emotional factors more debatable.
+        \item The extent to which readers enjoy a a story is often related to its outcome valence: good or bad, happy or sad. Outcome valence is generally a consequence of the proper resolution of the story's unexpectedness, which are mentioned in the cognitive factors of story interestingness.
+    \end{enumerate}
+\end{itemize}
+
+In the next section, we explain our decision process for coming up with a fixed set of criteria for human evaluation of {\asg}.
+
+\subsection{Our Proposed Human Criteria}
+\label{sub:our_criteria}
+
+Deciding on a fixed set of criteria for as subjective a task as story evaluation is undoubtedly a delicate endeavour. Upon reviewing the {\asg} and social sciences literature, we focused on several components that seemed to be frequently identified as reliable indicators of story quality. From the {\asg} literature, we reckoned that a vast majority of the observed criteria could be boiled down to two: Relevance, which is specific to our chosen setting of generating a story from a prompt, and Coherence, which is almost omnipresent when accounting for its different names. For the rest of our criteria, we mainly relied on the cognitive and emotional factors from \citet{bae2021preliminary}; for each of them, we looked at how they related to the frameworks proposed by \citet{mccabe1984makes} and \citet{dickman2003four}, as well as other sources.
+
+After a careful review, we condensed the frameworks presented in \autoref{sub:social_sciences} into a comprehensive set of criteria for story evaluation:
+\begin{enumerate}
+    \item \textbf{Relevance} (\myre): ``how well the story matches its prompt'', used in \citet{fan2018hierarchical, yao2019plan, jhamtani-berg-kirkpatrick-2020-narrative, akoury2020storium, goldfarb-tarrant-etal-2020-content, bai2021semantics};
+    \item \textbf{Coherence} (\mych): ``how much the story makes sense'', used in \citet{khalifa2017deeptingle, xu-etal-2018-skeleton, yao2019plan, jhamtani-berg-kirkpatrick-2020-narrative, akoury2020storium, wang2020narrative, guan2021long, wilmot2021temporal};
+    \item \textbf{Empathy} (\myem): ``how well the reader understood the character’s emotions'', derived from the importance of emotional commentary \citep{mccabe1984makes}, passion \citep{dickman2003four}, and empathy \citep{keen2007empathy, bae2021preliminary};
+    \item \textbf{Surprise} (\mysu): ``how surprising the end of the story was'', derived from the importance of schema violation, or unexpectedness \citep{schank1978interestingness, bae2021preliminary}, postdictability \citep{behrooz2019story}, and novelty \citep{randall1999narrative};
+    \item \textbf{Engagement} (\myeg): ``how much the reader engaged with the story''; a more subjective criterion associated with projecting volitive modality (making the reader formulate a subjective judgment and express a desire to see something accomplished) \citep{toolan2012engagement} and story outcome, which is an underlying cause of story liking \citep{iran1987cognitive}; 
+    \item \textbf{Complexity} (\mycx): ``how elaborate the story is''; derived from the importance of detailed descriptions and sophisticated problem-solving \citep{mccabe1984makes} and good world-building \citep{roine2016imaginative}.
+\end{enumerate}
+The four last criteria are an original contribution and were designed to evaluate story features that are different and, ideally, independent from the first two criteria (\myre\ and \mych), which were already commonly used in the \asg\ literature.
+
+In the next section, we focus on the automatic methods of {\asg} evaluation.
+
+\section{Selecting Automatic Measures for Story Evaluation}
+\label{sec:automatic_measures_story_evaluation}
+
+While human evaluation is unmatched when it comes to evaluation quality, it requires skilled annotators and elaborate guidelines, which makes it a time-consuming and expensive task. That is why automatic evaluation measures (such as \bleu\ \citep{papineni2002bleu}) were developed.
+
+The purpose of an evaluation measure is to assign a score to the outputs generated by a system and provide a quick and easy means of comparing different systems and tracking progress. Many evaluation measures compare a candidate text with a reference, which make them poorly adapted in the context of {\asgfull}: a given prompt can give birth to a myriad of different stories that remain relevant to it. And yet, most of the research work in {\asg} relies on such such as {\bleu} or {\rouge} \citep{lin2004rouge}, despite the fact that many other automatic evaluation measures have been developed.
+
+Since no {\asefull} measure has been proposed, we find important to study whether there exists better candidates for {\ase} than the omnipresent {\bleu} and {\rouge}. We selected a number of automatic measures for that purpose, which we present below.
+
+\subsection{Proposed Taxonomy of Automatic Evaluation Measures}
+\label{sub:taxonomy_measures}
+
+ We propose a taxonomy which classifies automatic measures along two independent axes, which we later use in our meta-evaluation benchmark in order to identify potential trends across the different categories of evaluation measures. First, an evaluation measure can belong to either of the two following categories:
+
+\begin{itemize}[noitemsep]
+    \item \emph{Reference-based} ($\Xi$): it evaluates a candidate text by comparing it to a reference text. In our {\asg} setting, that would mean comparing a candidate story with a reference story written for the same prompt;
+    \item \emph{Reference-free} (¤): it relies only on the candidate text. In our {\asg} setting, this would mean evaluating only the candidate story (and, possibly, the prompt).
+\end{itemize}
+
+Second, irrespective of their being reference-based or reference-free, an evaluation measure can also belong to one of the three following categories:
+
+\begin{itemize}[noitemsep]
+    \item \emph{String-based} (§): it evaluates the textual representation of the inputs. Such simple measures are typically unable to handle synonyms or paraphrases;
+    \item \emph{Embedding-based} ($\varepsilon$): it relies on word embeddings, \eg\ \wvec\ \citep{mikolov2013efficient, mikolov2013distributed}, or contextualized embeddings, \eg\ obtained from \bert\ \citep{devlin-etal-2019-bert};
+    \item \emph{Model-based} ($\Delta$): it leverages regression or pre-trained language models to return a score.
+\end{itemize}
+
+In particular, for the task of \asefull, one would expect reference-free measures to be more adapted since stories can be very different (both from a syntactic and semantic point of view) and yet of similar ``quality'', even if they were generated from the same prompt.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lll}
+\toprule
+  & \textbf{Reference-based} ($\Xi$) & \textbf{Reference-free} (¤) \\ 
+\midrule
+\multirow{6}{2cm}{\textbf{String-based} (§)} & {\bleu} \citep{papineni2002bleu} & \textsc{Coverage} \citep{grusky-etal-2018-newsroom}\\
+& {\rouge} \citep{lin2004rouge} & \textsc{Density} \citep{grusky-etal-2018-newsroom}\\
+& \textsc{METEOR} \citep{banerjee2005meteor} & \textsc{Compression} \citep{grusky-etal-2018-newsroom}\\
+& \textsc{chrF} \citep{popovic2015chrf} & \textsc{Text length} \citep{fabbri2021summeval}\\
+& \textsc{CIDEr} \citep{vedantam2015cider} & \textsc{Novelty} \citep{fabbri2021summeval}\\
+& & \textsc{Repetition} \citep{fabbri2021summeval}\\
+\midrule
+\multirow{5}{2cm}{\textbf{Embed-ding-based} ($\varepsilon$)} & \textsc{ROUGE-WE} \citep{ng2015better} & \\
+& \textsc{BERTScore} \citep{zhang2019bertscore} & \\
+& \textsc{MoverScore} \citep{zhao2019moverscore} & \textsc{SUPERT} \citep{gao2020supert} \\
+& \textsc{BaryScore} \citep{colombo2021automatic} & \\
+& \textsc{DepthScore} \citep{staerman2021pseudo}\\
+\midrule
+\multirow{4}{2cm}{\textbf{Model-based} ($\Delta$)} & \textsc{S3} \citep{peyrard2017s3} & \\
+& \textsc{SummaQA} \citep{scialom-etal-2019-answers} & \textsc{BLANC} \citep{vasilyev2020fill} \\
+& \textsc{InfoLM} \citep{colombo2021infolm} \\
+& \multicolumn{2}{c}{\textsc{BARTScore} \citep{yuan2021bartscore}}\\
+\bottomrule
+\end{tabular}
+\caption{Taxonomy of the automatic measures considered in our study with symbols for easier identification. Note: \textsc{BARTScore} was designed to be either reference-based or reference-free depending on the setting.}
+\label{tab:measures}
+\end{table}
+
+A synoptic view of the automatic measures considered in our study can be found in \autoref{tab:measures}. We made sure to select measures that belong to each category of our taxonomy.
+
+\subsection{Survey of Considered Automatic Measures}
+\label{sub:survey_automatic_measures}
+
+For a more comprehensive account of the automatic evaluation measures used in \nlp, we refer the reader to \citet{sai2022survey, chauhan2023comprehensive}.
+
+\paragraph{\bleu.}
+\citet{papineni2002bleu} introduce \bleu\ (BiLingual Evaluation Understudy), by far the most widely used automatic evaluation measure in \nlp. It is a precision-based measure that computes the $n$-gram overlap between the reference and the hypothesis. In particular, \bleu\ is the ratio of the number of overlapping $n$-grams to the total number of $n$-grams in the hypothesis. This
+precision is computed separately for different values of $n$ as shown below:
+
+\[ \textrm{Precision}_n = \frac{\sum_{p \in \textrm{hypotheses}} \sum_{n\textrm{-gram} \in p} \textrm{Count}_\textrm{clip} (n\textrm{-gram})}{\sum_{p \in \textrm{hypotheses}} \sum_{n\textrm{-gram} \in p} \textrm{Count} (n\textrm{-gram})}, \]
+
+where $\textrm{Count}_\textrm{clip} (n\textrm{-gram})$ is clipped by the maximum number of times the given $n$-gram appears in any of the corresponding reference sentences. Once the above precision is computed for different values of $n$, a final \textsc{BLEU-N} score is computed as a weighted combination (in this case, a geometric mean) of all the $\textrm{Precision}_n$ scores for $n = 1,\dots,N$. Since precision depends only on the length of the hypothesis and not on the length of the reference, an \nlg\ system can exploit the measure and acquire high scores by producing only a few matching words or $n$-grams as the hypothesis. To discourage such short meaningless hypotheses, a brevity penalty term, $\textrm{BP}$, is added to the formula. The final formula commonly used today is:
+
+\[ \textrm{BLEU-N} = \textrm{BP} \, \cdot \, \exp \left( \sum_{n=1}^N u_n \log \left( \textrm{Precision}_n \right) \right) , \quad \text{where} \quad \textrm{BP} = \begin{cases}
+    1 & \text{if}\ |p|>|r| \\
+    \exp \left( 1 - \frac{|r|}{|p|} \right) & \text{otherwise}
+\end{cases} \quad , \]
+
+where the $u_n$ are the weights of the different $n$-gram precisions, such that $\sum_{n=1}^N u_n = 1$ (usually, $u_n = \frac{1}{N}$).
+
+\paragraph{\rouge.}
+\citet{lin2004rouge} proposes \rouge\ (Recall-Oriented Understudy for Gisting Evaluation), which includes a set of variants: \rouge-$n$, \rouge-L, \rouge-W, and \rouge-S. \rouge-$n$ is similar to the $\textrm{Precision}_n$ term of \bleu-N in counting the $n$-gram matches between the hypothesis and reference, so we will henceforth refer to it as simply \rouge. The main difference with \bleu\ is that it is a recall-based measure whereas \bleu\ is precision-based:
+
+\[ \textrm{ROUGE-}n = \frac{\sum_{s_r \in \textrm{references}} \sum_{n\textrm{-gram} \in s_r} \textrm{Count}_\textrm{match} (n\textrm{-gram})}{\sum_{s_r \in \textrm{references}} \sum_{n\textrm{-gram} \in s_r} \textrm{Count} (n\textrm{-gram})}. \]
+
+\paragraph{\meteor.}
+\citet{banerjee2005meteor} point out that there are two major drawbacks of \bleu: (1) it does not take recall into account, and (2) it only allows exact $n$-gram matching. They then introduce \meteor\ (Metric for Evaluation of Translation with Explicit ORdering), which is based on a F-score and uses a relaxed matching criteria. In particular, even if a unigram in the hypothesis does not have an exact surface level match with a unigram in the reference but is still equivalent to it (\eg\ a synonym), then \meteor\ considers this as a matched unigram. More specifically, it first performs exact word (unigram) mapping, followed by stemmed word matching, and finally synonym and paraphrase matching. It then computes the F-score using this relaxed matching strategy ($\textrm{P}$ and $\textrm{R}$ stand for \emph{Precision} and \emph{Recall} respectively):
+
+\[ \textrm{F-score} = \frac{10 \textrm{P} \textrm{R}}{\textrm{R} + 9\textrm{P}}, \]
+
+\[ \text{where} \quad \textrm{P} = \frac{\#\{\textrm{mapped unigrams}\}}{\#\{\textrm{unigrams in candidate}\}} \quad \text{and} \quad \textrm{R} = \frac{\#\{\textrm{mapped unigrams}\}}{\#\{\textrm{unigrams in reference}\}} . \]
+
+Since \meteor\ only considers unigram matches (as opposed to $n$-gram matches), it seeks to reward longer contiguous matches using a penalty term known as ``fragmentation penalty''. To compute this, ``chunks'' of matches are identified in the hypothesis, where contiguous hypothesis unigrams that are mapped to contiguous unigrams in a reference can be grouped together into one chunk. Therefore longer $n$-gram matches lead to fewer number of chunks. The fewest possible number of chunks a hypothesis can have is used to compute the fragmentation penalty used by \meteor\ as:
+
+\[ \textrm{METEOR} = \textrm{F-score} \, \cdot \, \left( 1 - \textrm{Penalty} \right) , \quad \text{where} \quad \textrm{Penalty} = 0.5 \, \cdot \, \left( \frac{\#\{\textrm{chunks}\}}{\#\{\textrm{matched unigrams}\}} \right) ^3 .\]
+
+\paragraph{\chrf.}
+\citet{popovic2015chrf} propose the use of character $n$-gram F-score (\chrf) for the automatic evaluation of machine translation output. They argue that it is a simple measure that takes into account morpho-syntactic phenomena, does not require any additional tools and/or knowledge sources, is absolutely language independent, and is also tokenization independent. They define their measure as follows:
+
+\[ \chrf \beta \coloneqq (1 + \beta^2) \frac{\chrp \cdot \chrr}{\beta^2 \cdot \chrp + \chrr} , \]
+
+where \chrp\ and \chrr\ stand for character $n$-gram precision and recall arithmetically averaged over all $n$-grams, and $\beta$ is a parameter which assigns $\beta$ times more importance to recall than precision --- if $\beta = 1$, they have the same weight.
+
+They compute correlations with human rankings on \wmt12, \wmt13, and \wmt14 data, and find that \chrf\ outperforms other measures for a majority of texts at both system-level and segment-level.
+
+\paragraph{\cider.}
+\citet{vedantam2015cider} introduce \cider, an automatic measure that weighs each $n$-gram in a sentence based on its frequency in the corpus and in the reference set of the particular instance, using term-frequency and inverse-document-frequency (\tfidf). It was first proposed in the context of Image Captioning where each image is accompanied by multiple reference captions. It is based on the premise that n-grams that are relevant to an image would occur frequently in its set of reference captions. However, $n$-grams that appear frequently in the entire dataset (\ie, in the reference captions of different images) are less likely to be relevant and hence they are assigned a lower weight using inverse-document-frequency (IDF) term. To be more precise, the \tfidf\  weight, $g_{n_k}(s)$, for each $n$-gram $k$ in caption $s_i$ are computed as follows:
+
+\[ g_{n_k} (s) = \frac{t_k(s)}{\sum_{l \in V_n} t_l(s)} \log \left( \frac{|I|}{\sum_{i \in I} \min\left(1, \sum_{r \in R_i} t_k(r) \right)} \right) , \]
+
+where $V_n$ is the vocabulary of all $n$-grams, $g_{n_k}$ refers to the weight assigned to $n$-gram $k$, $t_k(s)$ is the number of times $k$ appears in $s$, $I$ is the set of all images, and $R_i$ corresponds to the set of references for image $i$.
+
+\cider\ first stems the words in hypothesis and references and represents each sentence as a set of $n$-grams. It then calculates weights for each $n$-gram using \tfidf. Using these \tfidf\ weights of all the $n$-grams of length $n$, vectors $g_n(s)$ are formed for each caption $s$. \cider$_n$ is calculated as the average cosine similarity between hypothesis and references. The final CIDEr score is the weighted average of \cider$_n$ for $n = 1, 2, 3, 4$:
+
+\[ \cider (p, R) = \sum_{n=1}^N W_n \cider_n (p,R), \quad \text{where} \quad \cider_n(p,R) = \frac{1}{|R|} \sum_{r \in R} \frac{g_n(p) \cdot g_n(r)}{\| g_n(p)\| \|g_n(r)\|} \]
+
+where $g_n(p)$ is a vector of the \tfidf\ weights in $p$ corresponding to all $n$-grams of length $n$, and uniform weights $W_n = \frac{1}{n}$ are usually used with $N = 4$.
+
+\paragraph{\rougewe.}
+\citet{ng2015better} integrate word embeddings into \rouge\ in order to tackle its bias towards lexical similarities. They define a new similarity function 
+
+\[ f_\textrm{WE}(w_1, w_2) = 
+    \begin{cases}
+        0 & \text{if } w_1 \text{ or } w_2 \text{ are OOV} \\
+        v_1 \cdot v_2 & \text{otherwise}
+    \end{cases}
+    \, ,\]
+
+where $w_1$ and $w_2$ are the words being compared and $v_1$ and $v_2$ are their respective embeddings. OOV (Out Of Vocabulary) means that there is no embedding for the word. Despite the large number of embeddings they use, they encounter a lot of OOV terms for $n$-grams with $n>1$. To solve this problem, they compose individual word embeddings together, following a simple multiplicative approach where individual vectors of constituent tokens are multiplied together to produce the vector for a n-gram, \ie:
+
+\[ W(w) \coloneqq W(w_1) \times \cdots \times W(w_n) , \]
+
+where $w$ is a $n$-gram composed of $n$ individual word tokens $w_1$, \dots, $w_n$ and $W(w_i)$ is the embedding of the word $w_i$. Their experimental results show that \rougewe\ is able to achieve better correlations with human judgements when measured with the Spearman and Kendall rank coefficients.
+
+\paragraph{\bertscore.}
+\citet{zhang2019bertscore} introduce \bertscore, a language generation evaluation measure based on pretrained \bert\ contextual embeddings \citep{devlin-etal-2019-bert}. \bertscore\ computes the similarity of two sentences as a sum of cosine similarities between their tokens’ embeddings. \bertscore\ addresses two common pitfalls in $n$-gram-based measures. First, such methods often fail to robustly match paraphrases: this leads to performance underestimation when semantically-correct phrases are penalized because they differ from the surface form of the reference. Second, $n$-gram models fail to capture distant dependencies and penalize semantically-critical ordering changes. In contrast, contextualized embeddings are trained to effectively capture distant dependencies and ordering. The complete \bertscore\ matches each token in a reference $x$ to a token in a candidate $\hat{x}$ to compute recall, and vice versa to compute precision. Both are combined to compute an F1 measure:
+
+\[ R_\bert = \frac{1}{|x|} \sum_{x_i \in x} \max_{\hat{x}_j \in \hat{x}} \left( \mathbf{x}_i^\mathsf{T} \hat{\mathbf{x}}_j \right) \quad , \quad P_\bert = \frac{1}{|x|} \sum_{\hat{x}_j \in \hat{x}} \max_{x_i \in x} \left( \mathbf{x}_i^\mathsf{T} \hat{\mathbf{x}}_j \right) \quad , \quad F_\bert = 2 \frac{P_\bert \cdot R_\bert}{P_\bert + R_\bert} \, .\]
+
+They additionally use importance weighting and baseline rescaling. They show that \bertscore\ correlates better with human judgments and provides stronger model selection performance than existing measures.
+
+\paragraph{\mover.}
+\citet{zhao2019moverscore} introduce \mover, a distance metric built upon a combination of (i) contextualized representations of system and reference texts and (ii) a distance between these representations measuring the semantic distance between system outputs and references. They find particularly important for a measure to not only capture the amount of shared content between two texts, \ie, $\textrm{intersect}(A,B)$, as is the case with many semantic textual similarity measures, but also to accurately reflect to what extent the system text has deviated from the reference, \ie, $\textrm{union}(A,B) - \textrm{intersect(A,B)}$, which is the intuition behind using a distance metric. \mover\ generalizes the Word Mover's Distance proposed by \citet{kusner2015wmd}: for $\mathbf{x}$ and $\mathbf{y}$ two sentences viewed as sequences of $n$-grams $x_i$ and $y_i$ and $\mathbf{C}$ a transportation cost matrix such that $\mathbf{C}_{ij} = d(x_i, y_j)$, we have:
+
+\[ \textrm{WMD}(\mathbf{x}, \mathbf{y}) = \min_{\mathbf{F} \in \mathbb{R}^{|\mathbf{x}| \times |\mathbf{y}|}} \langle \mathbf{C}, \mathbf{F} \rangle , \]
+
+where $\mathbf{F}$ is the transportation flow matrix with $\mathbf{F}_{ij}$ denoting the amount of flow traveling from $x_i$ to $y_j$, and $\langle \mathbf{C}, \mathbf{F} \rangle$ is the sum of all matrix entries of $\mathbf{C} \odot \mathbf{F}$, where $\odot$ denotes element-wise multiplication. In practice, they use the euclidean distance between the embedding representations of $n$-grams: 
+
+\[ d(x_i, y_j) = \| E(x_i) - E(y_j) \|_2 , \]
+
+where $E$ is the embedding function. Their findings suggest that measures combining contextualized representations with a distance measure perform the best and demonstrate strong generalization capability across tasks.
+
+\paragraph{\bary.}
+\citet{colombo2021automatic} introduce \bary, an evaluation measure which (i) finds the Wasserstein barycentric distributions of contextual encoder layers for a candidate and a reference, and (ii) evaluates these barycentric distributions using the Wasserstein distance. They compare their approach to the similar \mover\ and argue that using an euclidean distance does not allow a proper evaluation of the geometry induced by the contextualized encoder layers in the Wasserstein space. In other words, \mover\ evaluates a distorted geometry, inducing wrong interpretability of the transportation flow. The advantage of exploiting Wasserstein barycenters over euclidean aggregation relies on rehabilitating this geometry. They show that \bary\ achieves higher correlations with human judgment than \mover\ and other \bert-based measures.
+
+\paragraph{\depth.}
+\citet{staerman2021pseudo} introduce \depth, a new discrepancy measure between probability distributions involving the upper-level sets of data depth is introduced. They show that this measure defines a pseudo-metric in general and demonstrate its good behavior regarding major transformation groups, as well as its ability to factor out translations. They also put forth its robustness through the concept of finite sample
+breakdown point. Finally, they use this pseudo-metric for \nlg\ evaluation and find that \depth\ achieves higher correlations with human judgment than existing evaluation measures.
+
+\paragraph{\sthree.}
+\citet{peyrard2017s3} propose to learn an evaluation model \sthree\ for evaluating automatic summarization that is based on the human judgements available as part of classical summarization datasets. In particular, they note that any existing automatic scoring measure can be included as features: the model will learn the combination exhibiting the best correlation with human judgments. They use a Support Vector Regression (SVR) to learn their model, using many automatic evaluation measures as features and fitting the regression parameters so that the model is able to predict human judgment scores. They show that \sthree\ performs better than the measures used as its features and has low percentage of failure.
+
+\paragraph{\summa.}
+\citet{scialom-etal-2019-answers} introduce the \summa\ measure for the evaluation of question answering. They compute the average F1 score over each (input, question, answer) triplet to obtain a score called \qascore\ and compute the average confidence scores for each triplet to obtain \qaconf. Then, they use a Ridge regression to predict the geometric mean of readability and relevance from the two scores. Their best linear model, according to the experiment, was a linear combination of both scores and \rouge-L:
+
+\[ \alpha \, \rouge\mathrm{-L} + \beta \, \textrm{QA}_\textrm{conf} + \delta \, \textrm{QA}_\textrm{F-score} . \]
+
+They improve their model with reinforcement learning and observe that it leads to comparable performance in terms of \rouge\ \wrt\ state-of-the-art approaches.
+
+\paragraph{\infolm.}
+
+\citet{colombo2021infolm} introduce \infolm, a family of untrained metrics that can be viewed as string-based metrics. \infolm\ relies on a pretrained masked language model and makes use of information measures, allowing for its adaptation of various evaluation criteria. Given a reference text $\mathbf{x}$ and a candidate text $\mathbf{y}$, \infolm\ recursively masks each token position of both $\mathbf{x}$ and $\mathbf{y}$ to obtain individual masked contexts. Using the language model, it then predicts a probability distribution for each context. The two resulting distributions are averaged into well-formed discrete distributions $p_\mathbf{x}$ and $p_\mathbf{y}$, and then compared through a measure of information $I$ (\eg\ an $\alpha$-, $\gamma$-, or $AB$-divergence, an $L_p$ distance or the Fisher-Rao distance). Formally:
+
+\[ \infolm(\mathbf{x}, \mathbf{y}) \coloneqq I \left( p_\mathbf{x}, p_\mathbf{y} \right). \]
+
+They demonstrate that \infolm\ achieves statistically significant improvements and over 10 points of correlation gains in many configurations on both text summarization and data2text generation.
+
+\paragraph{\coverage, \density, and \compression.}
+\citet{grusky-etal-2018-newsroom} examine summarization strategies using three measures that capture the degree of text overlap between the summary and article, and the rate of compression of the information conveyed. Given an article text $A$ consisting and the corresponding article summary $S$, they define the set of extractive fragments $F(A,S)$ as the set of shared sequences of token in $A$ and $S$. They identify $F(A,S)$ using a greedy process and compute two measures based on it. The \coverage\ measure quantifies the extent to which a summary is derivative of a text. $\coverage(A, S)$ measures the percentage of words in the summary that are part of an extractive fragment with the article:
+\[ \coverage(A,S) \coloneqq \frac{1}{|S|} \sum_{f \in F(A,S)} |f| .\]
+The \density\ measure quantifies how well the word sequence of a summary can be described as a series of extractions. They define $\density(A, S)$ as the average length of the extractive fragment to which each word in the summary belongs. The density formulation is similar to the coverage definition but uses a square of the fragment length:
+\[ \density(A,S) \coloneqq \frac{1}{|S|} \sum_{f \in F(A,S)} |f|^2 .\]
+Finally, they also use a simple dimension of summarization, the compression ratio, to further characterize summarization strategies. They define \compression\ as the word ratio between article and summary:
+\[ \compression(A,S) \coloneqq \frac{|A|}{|S|} . \]
+Summarizing with higher compression is challenging as it requires capturing more precisely the critical aspects of the article text
+
+\paragraph{\tlength, \novelty, and \repetition.}
+\citet{fabbri2021summeval} perform a meta-evaluation of evaluation measures for text summarization. In addition to many existing evaluation measures, they include a few more data statistics:
+\begin{enumerate}[noitemsep]
+    \item \tlength\ is the length of the sequence;
+    \item \novelty\ is the percentage of $n$-grams in the summary not found in the input document;
+    \item \repetition\ is the percentage of $n$-grams in the summary which are repeated.
+\end{enumerate}
+
+\paragraph{\supert.}
+\citet{gao2020supert} study unsupervised multi-document summarization evaluation measures, which require neither human-written reference summaries nor human annotations. They propose \supert, which rates the quality of a summary by measuring its semantic similarity with a pseudo-reference summary, \ie, selected salient sentences from the source documents, using contextualized embeddings and soft token alignment techniques. They show that, compared to the state-of-the-art unsupervised evaluation measures, \supert\ correlates better with human ratings by 18-39\%. Furthermore, they use \supert\ as rewards to guide a neural-based reinforcement learning summarizer, yielding favorable performance compared to the state-of-the-art unsupervised summarizers.
+
+\paragraph{\blanc.}
+\citet{vasilyev2020fill} present \blanc, a new approach to the automatic estimation of document summary quality. \blanc\ is defined as a measure of how well a summary helps an independent, pre-trained language model while it performs its language understanding task on a document. It is based on a \bert\ \citep{devlin-etal-2019-bert} instance that is pre-trained to predict masked text tokens (words or sub-words). There are two \blanc\ versions: \blanc-help, which uses the summary text by directly concatenating it to each document sentence during inference, and \blanc-tune, which uses the summary text to fine-tune the language model, and then processes the entire document. \blanc-help is defined as the difference between the accuracy $A_s$ of unmasking with the summary and the accuracy $A_f$ of unmasking with the filler:
+\[ \blanc_\textrm{help} \coloneqq A_s - A_f = \frac{S_{01} - S_{10}}{S_\mathrm{total}} , \]
+where the $S_{ij}$ are the counts of unsuccessful/successful (0/1) unmasking for filler-input/summary-input ($i/j$). For \blanc-tune, the model first learns from the summary and then they observe how helpful this learning was in reconstructing masked tokens in text sentences by comparing the accuracies of two reconstructions: one that does use the summary, and one that does not. They show that \blanc\ can be competitive to human annotators for summarization evaluation.
+
+\paragraph{\bartscore.}
+\citet{yuan2021bartscore} conceptualize the evaluation of generated text as a text generation problem, modeled using pre-trained sequence-to-sequence models. They posit that models trained to convert generated text to/from a reference output or the source text will achieve higher scores when the generated text is better. They operationalize this idea using \bart\ \citep{lewis2019bart}, and propose the \bartscore\ measure, which uses the weighted log-probabiliy one one text $\mathbf{y}$ given another text $\mathbf{x}$. Formally:
+\[ \bartscore = \sum_{t=1}^m \omega_t \log p \left( \mathbf{y}_t \mid \mathbf{y}_{<t}, \mathbf{x}, \theta \right) , \]
+where the $\omega_t$ are the chosen weights and $\theta$ the parameters of the model. They show that \bartscore\ can outperform existing top-scoring measures in 16 of 22 test settings.
+
+\paragraph{Note on the Names of Variants of Evaluation Measures.}
+\label{par:measure_names}
+In this paragraph, we define the names we give to some variants of the automatic evaluation measures we used. \supert\ and \blanc\ are summarization measures which normally require a source document and a summary. In the \asg\ setting, we instead have a prompt and a generated story. The suffix ``\textsc{PS}'' means that we used the ``Prompt as the Summary'', and ``\textsc{SS}'' means the ``Story as the Summary''. The \gold\ suffix means we used the reference human story as the source document and the generated story as the summary. Also, given a couple of texts $(x,y)$, \bartscore\ computes a score based on the log-probability of $y$ given $x$. We used the suffixes ``\textsc{SH}'' for ``(Story, Human)'', ``\textsc{HS}'' for ``(Human, Story)'', ``\textsc{SP}'' for ``(Story, Prompt)'' and ``\textsc{PS}'' for ``(Prompt, Story)''.
+
+\section{Proposed Framework for Meta-Evaluation}
+\label{sec:meta_evaluation_framework}
+
+After designing a set of criteria for human evaluation and selecting automatic evaluation measures, we present in this section the framework we will use for our meta-evaluation of {\asg}.
+
+\subsection{Related Work}
+We reviewed the related work for meta-evaluation in general in \autoref{sub:background_meta_evaluation}. For {\asg} specifically, \citet{guan2021openmeva} introduced the {\openmeva} benchmark which compares human and generated stories. They sample prompts and stories from the {\roc} \citep{mostafazadeh2016corpus} and {\wpfan} \citep{fan2018hierarchical} datasets (interpreting the first sentence of the story as the prompt for {\roc}) and generate stories with several models. They also produce negative examples by applying perturbations to human stories. Then, they ask workers to evaluate a batch of stories {\wrt}\ their ``overall quality''. They refine the evaluation through a point deduction policy: if the story contains errors ({\eg}\ repetitive plots or unrelated events), its quality is reduced. While their protocol has its merits, we reckon that the stories from {\roc} are too short to be evaluated in a meaningful way (50 words on average), and that the aggregation of all errors in a single criterion is not ideal.
+
+\subsection{Meta-Evaluation Strategies}
+\label{sub:hanna_meta_evaluation_strategies}
+
+Our main objective will consist in comparing evaluation methods between one another. Especially, we would like to ascertain how well automatic measures correlate with human evaluation, which we will use as our gold standard.
+
+\paragraph{Notations.}
+For $S$ systems and $N$ story-prompts, let $y_i^j$ be the story generated by system $j \in \{1,\dots,S\}$ for story-prompt $i \in \{1,\dots,N\}$. For a (human or automatic) measure $m$, we note $m(y_i^j)$ the score associated to $y_i^j$. Let $K$ be a correlation coefficient (\eg\ Kendall's $\tau$ \citep{kendall1938new}).
+
+\begin{defi}{System-level Correlation ($K^\textrm{sys}_{m_1,m_2}$)}{system_level_correlation}
+This strategy measures how suited $m_1$ is w.r.t.\ $m_2$ if used to compare the performance of two systems. The correlation is applied to the mean values over all stories for all systems for both measures. Formally:
+\begin{align}
+K^\textrm{sys}_{m_1,m_2} &\coloneqq   K \left(\frac{1}{N} \mathbf{C}^\textrm{sys}_{m_1},\frac{1}{N} \mathbf{C}^\textrm{sys}_{m_2} \right),\\
+\text{where} \quad \mathbf{C}^\textrm{sys}_{m} & \coloneqq \left[ \sum\limits_{i=1}^N m\left(y_i^1\right),\dots, \sum\limits_{i=1}^N m\left(y_i^S\right)\right].\nonumber
+\end{align}
+\end{defi}
+
+\begin{defi}{Segment-level Correlation ($K^\textrm{seg}_{m_1,m_2}$)}{segment_level_correlation}
+This strategy measures how suited $m_1$ is \wrt\ $m_2$ if used as a loss or reward for a model. The correlation is applied to each story among all system outputs and the mean is taken. Formally:
+\begin{align}
+K^\textrm{seg}_{m_1,m_2} & \coloneqq  \frac{1}{N} \sum_{i=1}^N K \left( \mathbf{C}^{\textrm{seg}}_{m_1, i}, \mathbf{C}^{\textrm{seg}}_{m_2, i} \right),\\
+\text{where} \quad \mathbf{C}^\textrm{seg}_{m, i} & \coloneqq \left[ m\left(y_i^1\right),\cdots,m\left(y_i^S\right)\right].\nonumber
+\end{align}
+\end{defi}
+
+However, the segment-level correlation, often used in conjunction with the system-level one in the meta-evaluation literature \citep{ma-etal-2019-results,bhandari2020re}, is not adapted to \ase\ since stories generated from the same story-prompt are not required to be similar, while \eg\ translations of a sentence should look alike.
+
+We therefore use the overall correlation, which we define below.
+
+\begin{defi}{Overall Correlation ($K^\textrm{ovl}_{m_1,m_2}$)}{overall_correlation}
+This strategy computes the correlation between the full vectors containing the scores of $m_1$ or $m_2$ for a given story for every system. Formally:
+\begin{align}
+K^\textrm{ovl}_{m_1,m_2} & \coloneqq K \left( \mathbf{C}_{m_1},\mathbf{C}_{m_2} \right),\\
+\text{where} \quad \mathbf{C}_{m} & \coloneqq \left[\left(m\left(y_i^j\right)\right)_{(i,j) \in \{1, \dots, N\} \times \{1, \dots, S\}}\right].\nonumber
+\end{align}
+\end{defi}
+
+\begin{remk}{Differences With Our \coling\ Publication}{differences_coling}
+    We introduced the overall correlation strategy in our second publication \citep{chhun2024do} after reckoning that the segment-level correlation (called ``story-level'' correlation in \citet{chhun-etal-2022-human}) was not particularly adapted for the evaluation of \asg, as explained above. We therefore updated the figures and corresponding analyses in this thesis.
+\end{remk}
+
+\paragraph{Correlation Coefficients.}
+Three correlation coefficients are commonly used for meta-evaluation:
+\begin{enumerate}
+    \item Pearson's $r$ \citep{pearson1895vii} measures linear correlation between two sets of data $X$ and $Y$. It is defined as the covariance of the two variables divided by the product of their standard deviations. When applied to a sample, it is formulated as:
+    \[ r_{XY} \coloneqq \frac{\sum_{i=1}^n (x_i - \bar{x}) (y_i - \bar{y})}{\sqrt{\sum_{i=1}^n (x_i - \bar{x})^2}\sqrt{\sum_{i=1}^n (y_i - \bar{y})^2}} \, ,\]
+    where $n$ is the sample size, $x_i, y_i$ are the individual sample points and $\bar{x}, \bar{y}$ are the sample means. Pearson's $r$ is essentially a normalized measurement of the covariance, such that the result always has a value between -1 and 1.
+    \item Spearman's $\rho$ \citep{spearman1904proof} is a nonparametric measure of rank correlation that is defined as the Pearson correlation between the rank values of two variables $X$ and $Y$; while Pearson's correlation assesses linear relationships, Spearman's correlation assesses monotonic relationships (whether linear or not). Formally: \[ \rho_{XY} \coloneqq r_{R_X R_Y} , \] where $R_X$ and $R_Y$ are the rank variables associated with $X$ and $Y$.
+    \item Kendall's $\tau$ \citep{kendall1938new} is a measure of rank correlation that escribes the similarity of the orderings of the data when ranked by each of the quantities. It is computed based on the numbers of system pairs out of $\binom{N}{2}$ which are ranked the same between $X$ and $Y$. Formally:
+    \[ \tau \coloneqq \frac{P - Q}{\sqrt{(P + Q + T) \cdot (P + Q + U)}}, \]
+    where $P$ and $Q$ are the number of pairs ranked the same or different by $X$ and $Z$ respectively, and $T$ and $U$ are the number of ties only in $X$ or $Y$ respectively.
+\end{enumerate}
+
+Since our main concern is to evaluate automatic measures' ability to correctly determine whether one system is better than another, we favor Spearman's $\rho$ and Kendall's $\tau$ over Pearson's $r$. Moreover, \citet{gilpin1993table} argues that Kendall's $\tau$ approaches a normal distribution more rapidly than Spaerman's $\rho$ as the sample size increases, and that it is more tractable mathematically, particularly when ties are present. \citet{newson2002parameters} also argues that confidence intervals for Spearman's $\rho$ are less reliable and less interpretable than confidence intervals for Kendall's $\tau$. For those reasons, we choose to use Kendall's $\tau$ for our meta-evaluation process.
+
+\subsection{Statistical Testing}
+\label{sub:hanna_statisical_testing}
+
+\paragraph{Williams Test.}
+Correlations between two automatic measures on the same annotated dataset are not independent. As advised by \citet{graham-baldwin-2014-testing}, we use the Williams test \citep{williams1959regression,moon2019williams} to evaluate the strength of an \emph{increase} in dependent correlations \citep{steiger1980tests}. Given three features $X_1$, $X_2$ and $X_3$ of a population of size $n$, Williams's $t$ test for whether the correlation between $X_1$ and $X_2$ equals the correlation between $X_1$ and $X_3$ is formulated as follows:
+    \[ t \coloneqq \frac{(r_{12} - r_{13}) \sqrt{(n-1)(1+r_{23})}}{\sqrt{2K \frac{(n-1)}{(n-3)} + \frac{(r_{12} + r_{13})^2}{4} (1 - r_{23})^3}} \, , \]
+where $r_{ij}$ is the correlation between $X_i$ and $X_j$ and
+    \[ K \coloneqq 1 - {r_{12}}^2 - {r_{13}}^2 - {r_{23}}^2 + 2 \, r_{12} \, r_{13} \, r_{23} \, . \]
+Williams's $t$ statistic follows a Student's $t$-distribution with $n-3$ degrees of freedom. In particular, the Williams test takes the correlations between $X_2$ and $X_3$ into account.
+
+\paragraph{$p$-value Adjustment Procedure.}
+Furthermore, since we perform a large quantity of tests, we choose to correct $p$-values for multiplicity. A common procedure is to control for the probability of a Type I error, \ie, the probability of erroneously rejecting the null hypothesis, also called the family-wise error rate (\fwer). \fwer\ control methods include the Bonferroni correction \citep{dunn1959estimation}, which consists in multiplying the $p$-values by the number of hypotheses. However, the Bonferroni correction is very conservative, which means that the statistical power is greatly reduced. Thus, \citet{jafari2019and, lydersen2021adjustment} argue for controlling the false discovery rate: instead of limiting the probability of at least one false discovery, we control for the expected proportion of false discoveries.
+
+We use the Benjamini-Hochberg (BH) method \citep{benjamini1995controlling}. Given $m$ $p$-values $p_1, \dots, p_m$ sorted in increasing order and a significance level $\alpha$, the Benjamini-Hochberg method consists in finding the largest $k$ such that $p_k \leq \frac{k}{m} \alpha$. The null hypothesis would then be rejected for the first $k$ tests. This is equivalent to computing adjusted $p$-values $p_k^\star = p_k \frac{m}{k}$ and replacing the $p$-values from largest to smallest.
+
+\paragraph{Gradual Notion of Evidence.}
+Following recent recommendations to move beyond simplistic ``statistical significance'' tests \citep{amrhein2019scientists, wasserstein2019moving, mcshane2019abandon}, we report all $p$-values for transparency. So as to be less dichotomous about the interpretation of statistical results, we choose to use a gradual notion of evidence for our statistical analysis, as suggested by \citet{muff2022rewriting}. The proposed terminology is shown on \autoref{tab:gradual_evidence}.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{cc}
+\toprule
+\textbf{Value Range} & \textbf{Terminology} \\
+\midrule
+$1 < p < 0.1$ & Little or no evidence \\
+$0.1 < p < 0.05$ & Weak evidence \\
+$0.05 < p < 0.01$ & Moderate evidence \\
+$0.01 < p < 0.001$ & Strong evidence \\
+$0.001 < p < 0.0001$ & Very strong evidence \\
+\bottomrule
+\end{tabular}
+\caption{Gradual evidence language proposal \citep{muff2022rewriting}.}
+\label{tab:gradual_evidence}
+\end{table}
+
+\section{Conclusion}
+
+In this chapter, we presented a new, extensive methodology specifically designed for conducting a meta-evaluation of {\asgfull}. First, in order to bridge the gap between the non-standardized human evaluation observed in the {\nlp} literature and the mostly theoretical frameworks of the social sciences literature, we proposed an original, comprehensive set of six criteria for human story evaluation. Then, to find out what type of automatic measures is the most appropriate for {\asefull}, we reviewed a wide variety of them, introduced a new two-dimensional taxonomy relevant to {\asg}, notably through the reference-based \emph{vs.} reference-free distinction, and selected measures from each of our taxonomy's categories. Finally, we adapted the meta-evaluation framework used in the {\nlp} literature to {\asg}: in particular, we substitute the less relevant segment-level correlation strategy for the overall correlation strategy, and justify our choice of Kendall's $\tau$ as well as our statistical testing procedure. In \autoref{chap:hanna}, we recount the building process of {\hanna}, our corpus of Human ANnotated NArratives for {\asg} evaluation, which allows us to assess whether our proposed human criteria are well-founded. To that end, we will perform an annotation campaign where human raters are asked to grade stories {\wrt}\ our six criteria (\autoref{sub:hanna_v1}). We will also perform another annotation campaign with a different protocol, which involves {\llmfull}s  (\autoref{sub:llm_methodology_ase}).

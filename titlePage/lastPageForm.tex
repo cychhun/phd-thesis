@@ -1,0 +1,41 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Modèle pour la 4ème de couverture des thèses préparées à l'Institut Polytechnique de Paris, basé sur le modèle produit par Nikolas STOTT / Template for back cover of thesis made at Institut Polytechnique de Paris, based on the template made by Nikolas STOTT
+%%% Mis à jour par Aurélien ARNOUX (École polytechnique)/ Updated by Aurélien ARNOUX (École polytechnique)
+%%% Les instructions concernant chaque donnée à remplir sont données en bloc de commentaire / Rules to fill this file are given in comment blocks
+%%% ATTENTION Ces informations doivent tenir sur une seule page une fois compilées / WARNING These informations must contain in no more than one page once compiled
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Version du 28 avril 2020 : utilisation de .png au lieu de .jpg pour les logos
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\label{lastPageForm}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Formulaire / Form
+%%% Remplacer les paramètres des \newcommand par les informations demandées / Replace \newcommand parameters by asked informations
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \newcommand{\logoEd}{EDIPP}																		%% Logo de l'école doctorale. Indiquer le sigle (EDIPP, EDMH) / Doctoral school logo. Indicate the acronym : EDMH, EDIPP
+\newcommand{\PhDTitleFR}{Méthodologie et méta-évaluation comparative pour la génération automatique d'histoires}													%% Titre de la thèse en français / Thesis title in french
+\newcommand{\keywordsFR}{apprentissage profond, modèles de langage, traitement automatique du langage, apprentissage automatique}														%% Mots clés en français, séprarés par des , / Keywords in french, separated by ,
+\newcommand{\abstractFR}{
+    La narration d'histoires est un élément central de la culture humaine. De nombreuses approches de narration numérique ont été proposées, malgré les défis inhérents aux tâches de génération d'histoires et d'évaluation de leur qualité. Dans cette thèse, nous concevons une méthodologie et un benchmark pour la méta-évaluation de la génération automatique d'histoires (\asg).
+    
+    Tout d'abord, nous posons les bases de notre méta-évaluation : nous décrivons le contexte choisi, définissons les tâches d'{\asg} et d'évaluation automatique d'histoires ({\ase}) et proposons un ensemble original de six critères pour l'évaluation d'histoires. 
+    Ensuite, nous présentons {\hanna}, notre corpus d'histoires annotées manuellement (Human ANnotated NArratives), qui contient 1 056 histoires annotées selon nos six critères, et nous montrons que ces derniers permettent une évaluation humaine standardisée. Nous utilisons des grands modèles de langage ({\llm}) pour ajouter 480 nouvelles histoires et 150k+ annotations à {\hanna}. Nous observons principalement que les {\llm} obtiennent de meilleures notes que les humains, d'après les {\llm} que nous avons sélectionnés.
+    Ensuite, nous effectuons notre méta-évaluation comparative des mesures automatiques sur {\hanna}. Nous observons principalement que des mesures spécifiques pour l'{\ase} sont nécessaires, et que les mesures couramment utilisées comme {\bleu} sont sous-optimales. Nous montrons ensuite notre analyse de la performance des {\llm} pour l'{\ase} : nous constatons que les {\llm} sont actuellement la meilleure approximation de l'évaluation humaine de l'{\asg} et que, dans notre contexte spécifique, fournir des consignes détaillées n'améliore pas les corrélations entre les {\llm} et les évaluations humaines.
+    Nos résultats nous incitent à étudier si les performances affichées par les {\llm} en {\ase} et {\asg} peuvent être expliquées par différents facteurs. Nous réalisons une étude en trois parties sur les explications générées par les {\llm} et une analyse des données de pré-entraînement sur les performance des {\llm}. Nous constatons notamment que les {\llm} éprouvent des difficultés à expliquer leurs réponses par des affirmations étayées.
+    
+    Pour conclure, nous présentons trois perspectives de recherche principales : la conception de mesures spécifiques à l'{\ase}, l'étude plus approfondie des performances des {\llm} en {\asg} et {\ase}, et l'évaluation et l'atténuation des risques des {\llm} sur la société.
+}															%% Résumé en français / abstract in french
+
+\newcommand{\PhDTitleEN}{Meta-Evaluation Methodology and Benchmark for Automatic Story Generation}													%% Titre de la thèse en anglais / Thesis title in english
+\newcommand{\keywordsEN}{deep learning, language models, natural language processing, machine learning}														%% Mots clés en anglais, séprarés par des , / Keywords in english, separated by ,
+\newcommand{\abstractEN}{
+    Storytelling is a central component of human culture. Multiple approaches have been proposed to explore computational storytelling, despite the inherent challenges posed by the tasks of generating stories and assessing their quality. In this thesis, we design a meta-evaluation methodology and benchmark for {\asgfull} (\asg).
+
+    First, we lay the groundwork for conducting our meta-evaluation: we describe our chosen setting, provide definitions for the {\asg} and {\asefull} ({\ase}) tasks, and propose an original set of six criteria for story evaluation.
+    Then, we introduce {\hanna}, our corpus of Human ANnotated NArratives, which contains 1,056 stories annotated {\wrt}\ our six criteria, and show that those criteria allow for a standardized human evaluation. We use {\llmfull}s ({\llm}s) to augment {\hanna} with 480 new stories and 150k+ rating annotations. We observe that {\llm}s obtain better grades than humans, as rated by selected {\llm}s.
+    After that, we perform our meta-evaluation benchmark on {\hanna}. We mainly observe that specific measures for {\ase} are needed, and that commonly-used measures ({\eg}\ {\bleu}) are sub-optimal. We then show our analysis of {\llm} performance at {\ase}: we find that {\llm}s are currently the best proxy for human evaluation of {\asg} and that, in our specific setting, providing detailed guidelines does not improve correlations between {\llm} and human ratings.
+    Those results prompt us to study whether the performance displayed by {\llm}s at {\ase} and {\asg} can be explained through different factors. We perform a three-part study on {\llm}-generated explanations, and an analysis of pretraining data on {\llm} performance. Notably, we find that {\llm}s struggle to explain their answers with substantiated claims.
+    
+    Finally, we outline three main research perspectives: designing specific {\ase} measures, further investigating {\llm} performance at {\asg} and {\ase}, and assessing and mitigating the impact of {\llm}s on society.
+}															%% Résumé en anglais / abstract in english
